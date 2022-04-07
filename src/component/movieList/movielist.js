@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 import omdbapi from '../../Api/omdbapi';
 import MovieCard from '../movieCard/movieCard';
-import {COLORS, FONTS} from '../../constants/theme';
+import {COLORS, FONTS, SIZES} from '../../constants/theme';
 
 import styles from './styles';
 
@@ -23,8 +23,13 @@ const Movielist = ({type, keyWord = 'marvel', navigation}) => {
         }
         const response = await omdbapi.getMoviesList(type, keyWord);
 
-        if (response != false && response.data) {
+        if (response != false && response.data && response.data.Search) {
+          setIsNothing(false);
           setMovies(response.data.Search);
+          console.log('Entered data');
+        } else {
+          console.log('Entered');
+          setIsNothing(true);
         }
         setIsLoading(false);
       } catch (err) {
@@ -34,6 +39,35 @@ const Movielist = ({type, keyWord = 'marvel', navigation}) => {
     };
     getList();
   }, [type, keyWord]);
+  // Handle
+  const renderFilm = () => {
+    if (isNothing) {
+      return (
+        <View style={{width: SIZES.width, height: 300}}>
+          <Text
+            style={[
+              FONTS.h1,
+              {color: COLORS.white, textAlign: 'center', marginTop: 50},
+            ]}>
+            Not Found
+          </Text>
+        </View>
+      );
+    } else {
+      return movies.map((elem, index) => {
+        return (
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              navigation.navigate('Detail', {id: elem.imdbID});
+            }}>
+            <MovieCard title={elem.Title} image={elem.Poster}></MovieCard>
+          </TouchableOpacity>
+        );
+      });
+    }
+  };
+  const test = renderFilm;
   return (
     <>
       {isLoading ? (
@@ -41,19 +75,7 @@ const Movielist = ({type, keyWord = 'marvel', navigation}) => {
           <Text style={[FONTS.h1, {color: COLORS.white}]}>Loading...</Text>
         </View>
       ) : (
-        <>
-          {movies.map((elem, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  navigation.navigate('Detail', {id: elem.imdbID});
-                }}>
-                <MovieCard title={elem.Title} image={elem.Poster}></MovieCard>
-              </TouchableOpacity>
-            );
-          })}
-        </>
+        test()
       )}
     </>
   );

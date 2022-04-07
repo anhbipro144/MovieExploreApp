@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 400,
     position: 'relative',
-    top: -80,
+    top: -100,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,
     borderWidth: 1.5,

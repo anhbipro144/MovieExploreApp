@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   // Header
   header: {
-    marginTop: 30,
+    marginTop: 10,
     height: 50,
   },
   input: {

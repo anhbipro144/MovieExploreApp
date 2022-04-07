@@ -1,4 +1,10 @@
-import {View, Text, TextInput, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,6 +16,7 @@ import {category} from '../../Api/omdbapi';
 
 // Components
 import Movielist from '../../component/movieList/movielist';
+import Button from '../../component/button/button';
 
 const HomeScreen = ({navigation}) => {
   // States
@@ -28,10 +35,28 @@ const HomeScreen = ({navigation}) => {
       }}>
       <View style={styles.wrap}>
         <ScrollView>
+          {/* Info */}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 30,
+              paddingHorizontal: 20,
+            }}>
+            <Text style={[FONTS.h1thin, {color: COLORS.white}]}>Hi There!</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('About');
+              }}>
+              <Button title="About me"></Button>
+            </TouchableOpacity>
+          </View>
+          {/* Header */}
           <View style={styles.header}>
             <TextInput
               onSubmitEditing={() => {
                 setFinalKey(keyWord);
+                setKeyWord('');
               }}
               value={keyWord}
               onChangeText={setKeyWord}
@@ -82,7 +107,7 @@ const HomeScreen = ({navigation}) => {
                 <Movielist
                   navigation={navigation}
                   type={category.series}
-                  keyWord="marvel"></Movielist>
+                  keyWord={finalKey}></Movielist>
               </ScrollView>
             </View>
             {/* Episode */}
@@ -101,8 +126,8 @@ const HomeScreen = ({navigation}) => {
                 {/*  list */}
                 <Movielist
                   navigation={navigation}
-                  type={category.series}
-                  keyWord="batman"></Movielist>
+                  type={category.episode}
+                  keyWord={finalKey}></Movielist>
               </ScrollView>
             </View>
           </View>
